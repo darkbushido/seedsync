@@ -23,13 +23,13 @@ RUN apk --update --no-cache add \
     gcc \
     py-gevent \
     musl-dev \
-    lftp \
-    openssh-keygen
+    lftp
 
 WORKDIR /app/
 
 COPY --from=angular /app/build/ng-dist /app/html
 COPY src/python     /app/python
+COPY .ssh /home/${USERNAME}/.ssh
 ADD setup_default_config.sh /scripts/
 RUN chmod +x /scripts/setup_default_config.sh
 
@@ -42,13 +42,11 @@ RUN mkdir /config && \
     mkdir /downloads && \
     chown ${USERNAME}:${USERNAME} /config && \
     chown ${USERNAME}:${USERNAME} /downloads && \
-    chown ${USERNAME}:${USERNAME} /app
+    chown ${USERNAME}:${USERNAME} /app && \
+    chown ${USERNAME}:${USERNAME} /home/${USERNAME}/.ssh
 
 # Switch to non-root user
 USER ${USERNAME}
-
-RUN mkdir -p /home/${USERNAME}/.ssh \
-    && echo "StrictHostKeyChecking no\nUserKnownHostsFile /dev/null" > /home/${USERNAME}/.ssh
 
 RUN /scripts/setup_default_config.sh
 
