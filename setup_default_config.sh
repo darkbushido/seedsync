@@ -5,7 +5,7 @@ set -e
 
 CONFIG_DIR="/config"
 SETTINGS_FILE="${CONFIG_DIR}/settings.cfg"
-SCRIPT_PATH="/app/python/seedsync.py"
+SCRIPT_PATH="/src/seedsync.py"
 
 replace_setting() {
     NAME=$1
