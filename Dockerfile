@@ -14,6 +14,7 @@ RUN ng build -prod --output-path ${BUILDDIR}/ng-dist
 FROM python:3.6-alpine as seedsync
 
 RUN apk --update --no-cache add \
+    openssh-client \
     gcc \
     py-gevent \
     musl-dev \
@@ -23,17 +24,24 @@ WORKDIR /app/
 
 COPY --from=angular /app/build/ng-dist /app/html
 COPY src/python     /app/python
-COPY .ssh /root/.ssh
-ADD setup_default_config.sh /scripts/
-RUN chmod +x /scripts/setup_default_config.sh
+COPY setup_default_config.sh    /usr/local/bin/
+COPY docker-entrypoint.sh       /usr/local/bin/
+
+RUN chmod -R +x /usr/local/bin/
 
 RUN pip install -r /app/python/requirements.txt
 
 # Create non-root user and directories under that user
-RUN mkdir /config && \
+RUN mkdir -p /config/ssh && \
     mkdir /downloads 
 
-RUN /scripts/setup_default_config.sh
+RUN mkdir -p /root/.ssh
+COPY ssh /root/.ssh
+COPY ssh /config/ssh
+
+RUN setup_default_config.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 CMD [ \
     "python", \
@@ -45,4 +53,4 @@ CMD [ \
 
 EXPOSE 8800
 
-VOLUME /config /downloads
+# VOLUME /config /downloads
