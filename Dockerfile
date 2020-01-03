@@ -40,7 +40,7 @@ CMD [ \
     "/app/python/seedsync.py", \
     "-c", "/config", \
     "--html", "/app/html", \
-    "--scanfs", "/app/python/scanfs.py" \
+    "--scanfs", "/app/python/scan_fs.py" \
 ]
 
 EXPOSE 8800
