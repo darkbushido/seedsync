@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # exit on first error
 set -e
@@ -18,7 +18,7 @@ replace_setting() {
 }
 
 # Generate default config
-python3.5 ${SCRIPT_PATH} \
+python ${SCRIPT_PATH} \
     -c ${CONFIG_DIR} \
     --html / \
     --scanfs / \
