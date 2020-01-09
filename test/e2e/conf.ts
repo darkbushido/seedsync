@@ -15,10 +15,22 @@ import {Urls} from "./urls";
 export let config: Config = {
     framework: 'jasmine',
     capabilities: {
-        browserName: 'chrome'
+        browserName: 'chrome',
+        useAutomationExtension: false,
+        args: [
+            '--headless',
+            '--disable-gpu',
+            '-disable-dev-shm-usage',
+            '-disable-popup-blocking',
+            '--start-maximized',
+            '--disable-web-security',
+            '--allow-running-insecure-content',
+            '--disable-infobars'
+        ]
     },
-    specs: ['tests/**/*.spec.js'],
+    specs: ['src/**/*.spec.js'],
     seleniumAddress: Urls.SELENIUM_ADDRESS,
+    directConnect: false,
 
     // You could set no globals to true to avoid jQuery '$' and protractor '$'
     // collisions on the global namespace.

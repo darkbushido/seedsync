@@ -1,0 +1,41 @@
+version: "3.7"
+services:
+  seedsync:
+    build: .
+    ports:
+      - "8800:8800"
+  
+  chrome:
+    image: yukinying/chrome-headless-browser-selenium:latest
+    shm_size: 1024M
+    cap_add:
+     - SYS_ADMIN
+    ports:
+      - "4444:4444"
+      - "9222:9222"
+    depends_on: 
+      - seedsync
+    # entrypoint:
+    #   - /usr/bin/dumb-init
+    #   - --
+    #   - /usr/bin/google-chrome-unstable
+    #   - --disable-gpu
+    #   - --headless
+    #   - --disable-dev-shm-usage
+    #   - --remote-debugging-address=0.0.0.0
+    #   - --remote-debugging-port=9222
+    #   - --user-data-dir=/data
+
+      
+  test:
+    build: test/e2e
+    depends_on:
+      - seedsync
+      - chrome
+      - remote
+    command: /bin/true
+
+  remote:
+    build: test/remote
+    depends_on:
+      - seedsync

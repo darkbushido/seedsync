@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:18.04
 
 # Create non-root user
 RUN useradd --create-home -s /bin/bash remoteuser && \
